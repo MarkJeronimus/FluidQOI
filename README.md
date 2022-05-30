@@ -16,8 +16,7 @@ This is explained in more detail under the heading **FluidQOI**.
 ## Original QOI
 The code map of QOI looks like this:
 
-![readme-files/QOI-original.png](readme-files/QOI-original.png)
-<style type="text/css">img {width: 50%;}</style>
+<img src="readme-files/QOI-original.png" width="40%">
 
 Because it can be grouped in four blocks of 64 values, aligned at
 multiples of 64, this lends itself nicely to using bit masks.
@@ -36,7 +35,7 @@ Then I had a new idea.
 Why not freely vary the balance between the two with a parameter,
 and see what works best for a particular set of images?
 
-![readme-files/LiquidQOI.png](readme-files/LiquidQOI.png)
+<img src="readme-files/LiquidQOI.png" width="40%">
 
 With that system in place I got some promising results.
 But why stop there?
@@ -91,7 +90,7 @@ The name 'fluid' stems from the fact that there are also non-liquid fluids
 
 This is the final code map for FluidQOI:
 
-![readme-files/FluidQOI.png](readme-files/FluidQOI.png)
+<img src="readme-files/FluidQOI.png" width="40%">
 
 ## Other changes
 
