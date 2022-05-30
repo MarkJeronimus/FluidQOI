@@ -113,3 +113,6 @@ Here are some preliminary results:
 
 ![readme-files/LiquidQOI-chart.png](readme-files/LiquidQOI-chart-full.png)
 ![readme-files/LiquidQOI-chart.png](readme-files/LiquidQOI-chart.png)
+
+## Class diagram
+<img src="readme-files/Class diagram.png" width="50%">
