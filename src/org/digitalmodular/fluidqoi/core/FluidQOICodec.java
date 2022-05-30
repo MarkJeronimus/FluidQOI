@@ -22,6 +22,7 @@ public class FluidQOICodec {
 	protected int opMask3    = 0;
 	protected int opMask4    = 0;
 
+	// Encoder/Decoder state
 	protected int recentColorsIndex = 0;
 
 	protected void setIndexLength(int indexLength, int opRepeat) {
