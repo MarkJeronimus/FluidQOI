@@ -82,19 +82,19 @@ public abstract class FluidQOIPackedShortDecoder extends FluidQOIDecoder {
 		int value = data - opLuma322 + 1;
 
 		int dy = (value & 0b1110000) << 25 >> 3; // 6 bits, left-aligned
-		int du = (value & 0b0001100) << 28 >> 4; // 6 bits, left-aligned
-		int dv = (value & 0b0000011) << 30 >> 4; // 6 bits, left-aligned
+		int du = (value & 0b0001100) << 28 >> 3; // 5 bits, left-aligned
+		int dv = (value & 0b0000011) << 30 >> 3; // 5 bits, left-aligned
 
 		if (FluidQOIImageEncoder.debugging) {
-			statistics.recordOpLuma322(data, dy >> 26, du >> 26, dv >> 26);
+			statistics.recordOpLuma322(data, dy >> 26, du >> 27, dv >> 27);
 		}
 
 		int r = lastRGB & 0b11111000_00000000;
 		int g = lastRGB & 0b00000111_11100000;
 		int b = lastRGB & 0b00000000_00011111;
-		r = ((r << 16) + dy + du) >>> 16;
+		r = ((r << 16) + (dy << 1) + du) >>> 16;
 		g = ((g << 21) + dy) >>> 21;
-		b = ((b << 27) + dy + dv) >>> 27;
+		b = ((b << 27) + (dy << 1) + dv) >>> 27;
 		lastRGB = (short)(r | g | b);
 	}
 
