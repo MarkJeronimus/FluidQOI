@@ -37,7 +37,8 @@ public final class FluidQOITestMain {
 	}
 
 	public static void main(String... args) throws IOException {
-		FluidQOIImageEncoder.debugging = true;
+		FluidQOIImageEncoder.debugging = false;
+		FluidQOIImageDecoder.debugging = false;
 
 		findFilesToBenchmark(files, Paths.get("images-pixelart-tiles"));
 		files.sort(Comparator.comparing(Path::getFileName));

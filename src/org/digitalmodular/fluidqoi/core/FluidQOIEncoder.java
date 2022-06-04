@@ -3,7 +3,6 @@ package org.digitalmodular.fluidqoi.core;
 import java.nio.ByteBuffer;
 
 import org.digitalmodular.fluidqoi.FluidQOIConfig;
-import org.digitalmodular.fluidqoi.FluidQOIEncoderStatistics;
 import org.digitalmodular.fluidqoi.FluidQOIFormat;
 import org.digitalmodular.fluidqoi.FluidQOIImageEncoder;
 
@@ -19,9 +18,6 @@ public abstract class FluidQOIEncoder extends FluidQOICodec {
 	private   ByteBuffer out         = null;
 	protected boolean    firstPixel  = false;
 	protected int        repeatCount = 0;
-
-	protected final        FluidQOIEncoderStatistics statistics      = new FluidQOIEncoderStatistics();
-	protected static final FluidQOIEncoderStatistics totalStatistics = new FluidQOIEncoderStatistics();
 
 	protected FluidQOIEncoder(int longestOp, int opRepeat, FluidQOIConfig config) {
 		this.longestOp = longestOp;

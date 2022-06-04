@@ -20,12 +20,11 @@ public class FluidQOIEncoderStatistics {
 	private int countMask4    = 0;
 	private int countRepeat   = 0;
 
-	private final int[]   countIndexCounts  = new int[255];
-	private final int[]   countMask3Counts  = new int[15];
-	private final int[]   countMask4Counts  = new int[15];
-	private final int[]   countRepeatCounts = new int[254];
-	private final int[][] lumaChannelCounts = new int[4][255];
-	private final int[]   lumaCounts        = new int[255];
+	private final int[]   countIndexCounts      = new int[255];
+	private final int[]   countMask3Counts      = new int[15];
+	private final int[]   countMask4Counts      = new int[15];
+	private final int[]   countRepeatCounts     = new int[254];
+	private final int[][] diffLumaChannelCounts = new int[6][256];
 
 	private final int[] headCodes = new int[256];
 
@@ -85,25 +84,25 @@ public class FluidQOIEncoderStatistics {
 		b &= 0xFF;
 
 		if (mask == 0b0010) {
-			System.out.printf("%02X %02X          OP_MASK4(--B- %d)",
+			System.out.printf("%02X %02X          OP_MASK4(--B- %d)\n",
 			                  data, b & 0xFF, b);
 		} else if (mask == 0b0100) {
-			System.out.printf("%02X %02X          OP_MASK4(-G-- %d)",
+			System.out.printf("%02X %02X          OP_MASK4(-G-- %d)\n",
 			                  data, g & 0xFF, g);
 		} else if (mask == 0b0110) {
-			System.out.printf("%02X %02X %02X       OP_MASK4(-GB- %d %d)",
+			System.out.printf("%02X %02X %02X       OP_MASK4(-GB- %d %d)\n",
 			                  data, g & 0xFF, b & 0xFF, g, b);
 		} else if (mask == 0b1000) {
-			System.out.printf("%02X %02X          OP_MASK4(R--- %d)",
+			System.out.printf("%02X %02X          OP_MASK4(R--- %d)\n",
 			                  data, r & 0xFF, r);
 		} else if (mask == 0b1010) {
-			System.out.printf("%02X %02X %02X       OP_MASK4(R-B- %d %d)",
+			System.out.printf("%02X %02X %02X       OP_MASK4(R-B- %d %d)\n",
 			                  data, r & 0xFF, b & 0xFF, r, b);
 		} else if (mask == 0b1100) {
-			System.out.printf("%02X %02X %02X       OP_MASK4(RG-- %d %d)",
+			System.out.printf("%02X %02X %02X       OP_MASK4(RG-- %d %d)\n",
 			                  data, r & 0xFF, g & 0xFF, r, g);
 		} else if (mask == 0b1110) {
-			System.out.printf("%02X %02X %02X %02X    OP_MASK4(RGB- %d %d %d)",
+			System.out.printf("%02X %02X %02X %02X    OP_MASK4(RGB- %d %d %d)\n",
 			                  data, r & 0xFF, g & 0xFF, b & 0xFF, r, g, b);
 		} else {
 			throw new AssertionError("Invalid mask: " + mask);
@@ -121,49 +120,49 @@ public class FluidQOIEncoderStatistics {
 		a &= 0xFF;
 
 		if (mask == 0b0001) {
-			System.out.printf("%02X %02X          OP_MASK4(---A %d)",
+			System.out.printf("%02X %02X          OP_MASK4(---A %d)\n",
 			                  data, a & 0xFF, a);
 		} else if (mask == 0b0010) {
-			System.out.printf("%02X %02X          OP_MASK4(--B- %d)",
+			System.out.printf("%02X %02X          OP_MASK4(--B- %d)\n",
 			                  data, b & 0xFF, b);
 		} else if (mask == 0b0011) {
-			System.out.printf("%02X %02X %02X       OP_MASK4(--BA %d %d)",
+			System.out.printf("%02X %02X %02X       OP_MASK4(--BA %d %d)\n",
 			                  data, b & 0xFF, a & 0xFF, b, a);
 		} else if (mask == 0b0100) {
-			System.out.printf("%02X %02X          OP_MASK4(-G-- %d)",
+			System.out.printf("%02X %02X          OP_MASK4(-G-- %d)\n",
 			                  data, g & 0xFF, g);
 		} else if (mask == 0b0101) {
-			System.out.printf("%02X %02X %02X       OP_MASK4(-G-A %d %d)",
+			System.out.printf("%02X %02X %02X       OP_MASK4(-G-A %d %d)\n",
 			                  data, g & 0xFF, a & 0xFF, g, a);
 		} else if (mask == 0b0110) {
-			System.out.printf("%02X %02X %02X       OP_MASK4(-GB- %d %d)",
+			System.out.printf("%02X %02X %02X       OP_MASK4(-GB- %d %d)\n",
 			                  data, g & 0xFF, b & 0xFF, g, b);
 		} else if (mask == 0b0111) {
-			System.out.printf("%02X %02X %02X %02X    OP_MASK4(-GBA %d %d %d)",
+			System.out.printf("%02X %02X %02X %02X    OP_MASK4(-GBA %d %d %d)\n",
 			                  data, g & 0xFF, b & 0xFF, a & 0xFF, g, b, a);
 		} else if (mask == 0b1000) {
-			System.out.printf("%02X %02X          OP_MASK4(R--- %d)",
+			System.out.printf("%02X %02X          OP_MASK4(R--- %d)\n",
 			                  data, r & 0xFF, r);
 		} else if (mask == 0b1001) {
-			System.out.printf("%02X %02X %02X       OP_MASK4(R--A %d %d)",
+			System.out.printf("%02X %02X %02X       OP_MASK4(R--A %d %d)\n",
 			                  data, r & 0xFF, a & 0xFF, r, a);
 		} else if (mask == 0b1010) {
-			System.out.printf("%02X %02X %02X       OP_MASK4(R-B- %d %d)",
+			System.out.printf("%02X %02X %02X       OP_MASK4(R-B- %d %d)\n",
 			                  data, r & 0xFF, b & 0xFF, r, b);
 		} else if (mask == 0b1011) {
-			System.out.printf("%02X %02X %02X %02X    OP_MASK4(R-BA %d %d %d)",
+			System.out.printf("%02X %02X %02X %02X    OP_MASK4(R-BA %d %d %d)\n",
 			                  data, r & 0xFF, b & 0xFF, a & 0xFF, r, b, a);
 		} else if (mask == 0b1100) {
-			System.out.printf("%02X %02X %02X       OP_MASK4(RG-- %d %d)",
+			System.out.printf("%02X %02X %02X       OP_MASK4(RG-- %d %d)\n",
 			                  data, r & 0xFF, g & 0xFF, r, g);
 		} else if (mask == 0b1101) {
-			System.out.printf("%02X %02X %02X %02X    OP_MASK4(RG-A %d %d %d)",
+			System.out.printf("%02X %02X %02X %02X    OP_MASK4(RG-A %d %d %d)\n",
 			                  data, r & 0xFF, g & 0xFF, a & 0xFF, r, g, a);
 		} else if (mask == 0b1110) {
-			System.out.printf("%02X %02X %02X %02X    OP_MASK4(RGB- %d %d %d)",
+			System.out.printf("%02X %02X %02X %02X    OP_MASK4(RGB- %d %d %d)\n",
 			                  data, r & 0xFF, g & 0xFF, b & 0xFF, r, g, b);
 		} else if (mask == 0b1111) {
-			System.out.printf("%02X %02X %02X %02X %02X OP_MASK4(RGBA %d %d %d %d)",
+			System.out.printf("%02X %02X %02X %02X %02X OP_MASK4(RGBA %d %d %d %d)\n",
 			                  data, r & 0xFF, g & 0xFF, b & 0xFF, a & 0xFF, r, g, b, a);
 		} else {
 			throw new AssertionError("Invalid mask: " + mask);
@@ -186,19 +185,19 @@ public class FluidQOIEncoderStatistics {
 		}
 	}
 
-	public void recordLumaCounts(int dy, int du, int dv, int da) {
-		dy &= 0xFF;
+	public void recordDiffLumaCounts(int dr, int dg, int db, int du, int dv, int da) {
+		dr &= 0xFF;
+		dg &= 0xFF;
+		db &= 0xFF;
 		du &= 0xFF;
 		dv &= 0xFF;
 		da &= 0xFF;
-		lumaChannelCounts[0][dy]++;
-		lumaChannelCounts[1][du]++;
-		lumaChannelCounts[2][dv]++;
-		lumaChannelCounts[3][da]++;
-		lumaCounts[dy]++;
-		lumaCounts[du]++;
-		lumaCounts[dv]++;
-		lumaCounts[da]++;
+		diffLumaChannelCounts[0][dr]++;
+		diffLumaChannelCounts[1][dg]++;
+		diffLumaChannelCounts[2][db]++;
+		diffLumaChannelCounts[3][du]++;
+		diffLumaChannelCounts[4][dv]++;
+		diffLumaChannelCounts[5][da]++;
 	}
 
 	public void add(FluidQOIEncoderStatistics other) {
@@ -209,22 +208,18 @@ public class FluidQOIEncoderStatistics {
 		countMask4 += other.countMask4;
 		countRepeat += other.countRepeat;
 
-		for (int i = 0; i < 15; i++) {
+		for (int i = 0; i < countMask4Counts.length; i++) {
 			countMask4Counts[i] += other.countMask4Counts[i];
 		}
 
-		for (int i = 0; i < 255; i++) {
+		for (int i = 0; i < countRepeatCounts.length; i++) {
 			countRepeatCounts[i] += other.countRepeatCounts[i];
 		}
 
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < lumaChannelCounts.length; j++) {
-				lumaChannelCounts[i][j] += other.lumaChannelCounts[i][j];
+		for (int i = 0; i < diffLumaChannelCounts.length; i++) {
+			for (int j = 0; j < diffLumaChannelCounts[i].length; j++) {
+				diffLumaChannelCounts[i][j] += other.diffLumaChannelCounts[i][j];
 			}
-		}
-
-		for (int i = 0; i < lumaCounts.length; i++) {
-			lumaCounts[i] += other.lumaCounts[i];
 		}
 
 		for (int i = 0; i < 256; i++) {
@@ -305,11 +300,12 @@ public class FluidQOIEncoderStatistics {
 		}
 
 		if (hasLuma) {
-			System.out.println("  LumaCountsY " + printDynamicArray(lumaChannelCounts[0]));
-			System.out.println("  LumaCountsU " + printDynamicArray(lumaChannelCounts[1]));
-			System.out.println("  LumaCountsV " + printDynamicArray(lumaChannelCounts[2]));
-			System.out.println("  LumaCountsA " + printDynamicArray(lumaChannelCounts[3]));
-			System.out.println("  LumaCounts " + printDynamicArray(lumaCounts));
+			System.out.println("  LumaCountsR " + printDynamicArray(diffLumaChannelCounts[0]));
+			System.out.println("  LumaCountsG " + printDynamicArray(diffLumaChannelCounts[1]));
+			System.out.println("  LumaCountsB " + printDynamicArray(diffLumaChannelCounts[2]));
+			System.out.println("  LumaCountsU " + printDynamicArray(diffLumaChannelCounts[3]));
+			System.out.println("  LumaCountsV " + printDynamicArray(diffLumaChannelCounts[4]));
+			System.out.println("  LumaCountsA " + printDynamicArray(diffLumaChannelCounts[5]));
 		}
 
 		System.out.println("  HeadCodes " + printDynamicArray(headCodes));

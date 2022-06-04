@@ -77,14 +77,16 @@ public class FluidQOI888Encoder extends FluidQOIEncoder {
 				writeOpIndex((byte)recentColorIndex);
 				recordRecent = false;
 			} else {
-				int du = (byte)(r - lastR); // wrap around 8 bits, but keep signed
-				int dy = (byte)(g - lastG);
-				int dv = (byte)(b - lastB);
-				du -= dy;
-				dv -= dy;
+				byte dr = (byte)(r - lastR); // wrap around 8 bits, but keep signed
+				byte dg = (byte)(g - lastG);
+				byte db = (byte)(b - lastB);
+				//noinspection UnnecessaryLocalVariable
+				byte dy = dg;
+				byte du = (byte)(dr - dy);
+				byte dv = (byte)(db - dy);
 
 				if (FluidQOIImageEncoder.debugging) {
-					statistics.recordLumaCounts(dy, du, dv, 0);
+					statistics.recordDiffLumaCounts(dr, dg, db, du, dv, 0);
 				}
 
 				if (du >= -2 && du < 2 && // Ordered by largest chance to fail this test

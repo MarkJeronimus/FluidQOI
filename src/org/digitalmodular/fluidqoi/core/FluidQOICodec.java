@@ -1,5 +1,7 @@
 package org.digitalmodular.fluidqoi.core;
 
+import org.digitalmodular.fluidqoi.FluidQOIEncoderStatistics;
+
 /**
  * Superclass containing common elements for both encoder and decoder
  *
@@ -24,6 +26,9 @@ public class FluidQOICodec {
 
 	// Encoder/Decoder state
 	protected int recentColorsIndex = 0;
+
+	protected final        FluidQOIEncoderStatistics statistics      = new FluidQOIEncoderStatistics();
+	protected static final FluidQOIEncoderStatistics totalStatistics = new FluidQOIEncoderStatistics();
 
 	protected void setIndexLength(int indexLength, int opRepeat) {
 		this.indexLength = indexLength;

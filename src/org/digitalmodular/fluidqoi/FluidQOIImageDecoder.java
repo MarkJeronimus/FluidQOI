@@ -21,6 +21,9 @@ public class FluidQOIImageDecoder {
 	private FluidQOIFormat format;
 	private int            indexLength;
 
+	@SuppressWarnings({"PublicField", "StaticNonFinalField"})
+	public static       boolean debugging       = false;
+
 	public BufferedImage decode(ByteBuffer in) throws IOException {
 		readHeader(in);
 

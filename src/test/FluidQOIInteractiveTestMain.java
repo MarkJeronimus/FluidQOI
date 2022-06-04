@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
+import org.digitalmodular.fluidqoi.FluidQOIImageDecoder;
 import org.digitalmodular.fluidqoi.FluidQOIImageEncoder;
 
 /**
@@ -36,6 +37,7 @@ public class FluidQOIInteractiveTestMain extends JPanel {
 		FluidQOITestMain.files.sort(Comparator.comparing(Path::getFileName));
 
 		FluidQOIImageEncoder.debugging = true;
+		FluidQOIImageDecoder.debugging = true;
 
 		if (FluidQOITestMain.files.isEmpty()) {
 			System.err.println("No files found");

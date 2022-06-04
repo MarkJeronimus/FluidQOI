@@ -86,14 +86,17 @@ public class FluidQOI8888Encoder extends FluidQOIEncoder {
 				writeOpIndex(recentColorIndex);
 				recordRecent = false;
 			} else {
-				byte du = (byte)(r - lastR); // wrap around 8 bits, but keep signed
-				byte dy = (byte)(g - lastG);
-				byte dv = (byte)(b - lastB);
-				du -= dy;
-				dv -= dy;
+				byte dr = (byte)(r - lastR); // wrap around 8 bits, but keep signed
+				byte dg = (byte)(g - lastG);
+				byte db = (byte)(b - lastB);
+				byte da = (byte)(a - lastA);
+				//noinspection UnnecessaryLocalVariable
+				byte dy = dg;
+				byte du = (byte)(dr - dy);
+				byte dv = (byte)(db - dy);
 
 				if (FluidQOIImageEncoder.debugging) {
-					statistics.recordLumaCounts(dy, du, dv, (a - lastA));
+					statistics.recordDiffLumaCounts(dr, dg, db, du, dv, da);
 				}
 
 				if ((mask & 0b0001) == 0) { // Same alpha
@@ -109,7 +112,6 @@ public class FluidQOI8888Encoder extends FluidQOIEncoder {
 						writeOpMask4(mask, r, g, b, a);
 					}
 				} else { // Not same alpha
-					byte da = (byte)(a - lastA);
 					if (du >= -8 && du < 8 &&
 					    dv >= -8 && dv < 8 &&
 					    dy >= -8 && dy < 8 &&

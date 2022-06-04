@@ -67,14 +67,16 @@ public class FluidQOI565Encoder extends FluidQOIEncoder {
 				writeOpIndex((byte)recentColorIndex);
 				recordRecent = false;
 			} else {
-				byte du = (byte)((rgb - (lastRGB & 0b11111000_00000000) & 0b11111000_00000000) << 15 >> 26);
-				byte dy = (byte)((rgb - (lastRGB & 0b00000111_11100000) & 0b00000111_11100000) << 21 >> 26);
-				byte dv = (byte)((rgb - (lastRGB & 0b00000000_00011111) & 0b00000000_00011111) << 26 >> 26);
-				du -= dy;
-				dv -= dy;
+				byte dr = (byte)((rgb - (lastRGB & 0b11111000_00000000) & 0b11111000_00000000) << 15 >> 26);
+				byte dg = (byte)((rgb - (lastRGB & 0b00000111_11100000) & 0b00000111_11100000) << 21 >> 26);
+				byte db = (byte)((rgb - (lastRGB & 0b00000000_00011111) & 0b00000000_00011111) << 26 >> 26);
+				//noinspection UnnecessaryLocalVariable
+				byte dy = dg;
+				byte du = (byte)(dr - dy);
+				byte dv = (byte)(db - dy);
 
 				if (FluidQOIImageEncoder.debugging) {
-					statistics.recordLumaCounts(dy, du, dv, 0);
+					statistics.recordDiffLumaCounts(dr, dg, db, du, dv, 0);
 				}
 
 				if (du >= -2 && du < 2 && // Ordered by largest chance to fail this test

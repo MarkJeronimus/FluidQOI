@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferShort;
 
 import org.digitalmodular.fluidqoi.FluidQOIFormat;
+import org.digitalmodular.fluidqoi.FluidQOIImageEncoder;
 
 /**
  * @author Mark Jeronimus
@@ -51,7 +52,13 @@ public abstract class FluidQOIPackedShortDecoder extends FluidQOIDecoder {
 		recentColorsIndex = (recentColorsIndex + 1) % indexLength;
 	}
 
-	protected void readOpIndex(int index) {
+	protected void readOpIndex(int data) {
+		int index = data - opIndex;
+
+		if (FluidQOIImageEncoder.debugging) {
+			statistics.recordOpIndex(data, index);
+		}
+
 		lastRGB = recentColorsList[index - opIndex];
 	}
 
@@ -61,8 +68,10 @@ public abstract class FluidQOIPackedShortDecoder extends FluidQOIDecoder {
 		int dy = (value & 0b110000) << 26 >> 3; // 5 bits, left-aligned
 		int du = (value & 0b001100) << 28 >> 3; // 5 bits, left-aligned
 		int dv = (value & 0b000011) << 30 >> 3; // 5 bits, left-aligned
-		du = dy + du;                           // 5 bits, left-aligned
-		dv = dy + dv;                           // 5 bits, left-aligned
+
+		if (FluidQOIImageEncoder.debugging) {
+			statistics.recordOpLuma222(data, dy >> 27, du >> 27, dv >> 27);
+		}
 
 		int r = (lastRGB & 0b01111100_00000000) << 17; // 5 bits, left-aligned
 		int g = (lastRGB & 0b00000011_11100000) << 22; // 5 bits, left-aligned
@@ -79,8 +88,10 @@ public abstract class FluidQOIPackedShortDecoder extends FluidQOIDecoder {
 		int dy = (value & 0b1110000) << 25 >> 3; // 6 bits, left-aligned
 		int du = (value & 0b0001100) << 28 >> 4; // 6 bits, left-aligned
 		int dv = (value & 0b0000011) << 30 >> 4; // 6 bits, left-aligned
-		du = (dy + du) << 1;                     // 5 bits, left-aligned
-		dv = (dy + dv) << 1;                     // 5 bits, left-aligned
+
+		if (FluidQOIImageEncoder.debugging) {
+			statistics.recordOpLuma322(data, dy >> 26, du >> 26, dv >> 26);
+		}
 
 		int r = (lastRGB & 0b11111000_00000000) << 16; // 5 bits, left-aligned
 		int g = (lastRGB & 0b00000111_11100000) << 21; // 6 bits, left-aligned
@@ -98,8 +109,10 @@ public abstract class FluidQOIPackedShortDecoder extends FluidQOIDecoder {
 		int dy = (((value & 0b00000011 << 30) | (data2 & 0b11000000) << 22)) >> 2; // 6 bits, left-aligned
 		int du = ((data2 & 0b00111000) << 26) >> 3;                                // 6 bits, left-aligned
 		int dv = ((data2 & 0b00000111) << 29) >> 3;                                // 6 bits, left-aligned
-		du = (dy + du) << 1;                                                       // 5 bits, left-aligned
-		dv = (dy + dv) << 1;                                                       // 5 bits, left-aligned
+
+		if (FluidQOIImageEncoder.debugging) {
+			statistics.recordOpLuma433(data1, data2, dy >> 26, du >> 26, dv >> 26);
+		}
 
 		int r = (lastRGB & 0b11111000_00000000) << 16; // 5 bits, left-aligned
 		int g = (lastRGB & 0b00000111_11100000) << 21; // 6 bits, left-aligned
@@ -113,12 +126,22 @@ public abstract class FluidQOIPackedShortDecoder extends FluidQOIDecoder {
 	protected void readOpRGB555(int data1) {
 		int value = data1 - opRGB555;
 		int data2 = in.get() & 0xFF;
+
 		lastRGB = (short)((value << 8) | data2);
+
+		if (FluidQOIImageEncoder.debugging) {
+			statistics.recordOpRGB555(data1, data2, lastRGB);
+		}
 	}
 
 	protected void readOpRGB565() {
 		int data2 = in.get() & 0xFF;
 		int data3 = in.get() & 0xFF;
+
 		lastRGB = (short)((data2 << 8) | data3);
+
+		if (FluidQOIImageEncoder.debugging) {
+			statistics.recordOpRGB565(opRGB565, data2, data3, lastRGB);
+		}
 	}
 }

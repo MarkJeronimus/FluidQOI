@@ -5,6 +5,7 @@ import java.awt.image.DataBufferByte;
 import java.util.Arrays;
 
 import org.digitalmodular.fluidqoi.FluidQOIFormat;
+import org.digitalmodular.fluidqoi.FluidQOIImageDecoder;
 
 /**
  * @author Mark Jeronimus
@@ -60,7 +61,13 @@ public abstract class FluidQOIInterleavedByteDecoder extends FluidQOIDecoder {
 		recentColorsIndex = (recentColorsIndex + 1) % indexLength;
 	}
 
-	protected void readOpIndex(int index) {
+	protected void readOpIndex(int data) {
+		int index = data - opIndex;
+
+		if (FluidQOIImageDecoder.debugging) {
+			statistics.recordOpIndex(data, index);
+		}
+
 		byte[] c = recentColorsList[index];
 		lastR = c[0];
 		lastG = c[1];
@@ -75,6 +82,10 @@ public abstract class FluidQOIInterleavedByteDecoder extends FluidQOIDecoder {
 		int du = ((value & 0b001100) << 28) >> 30;
 		int dv = ((value & 0b000011) << 30) >> 30;
 
+		if (FluidQOIImageDecoder.debugging) {
+			statistics.recordOpLuma222(data, dy, du, dv);
+		}
+
 		lastR += dy + du;
 		lastG += dy;
 		lastB += dy + dv;
@@ -87,6 +98,10 @@ public abstract class FluidQOIInterleavedByteDecoder extends FluidQOIDecoder {
 		int dy = ((value & 0b111111) << 26) >> 26;
 		int du = ((data2 & 0b11110000) << 24) >> 28;
 		int dv = ((data2 & 0b00001111) << 28) >> 28;
+
+		if (FluidQOIImageDecoder.debugging) {
+			statistics.recordOpLuma644(data1, data2, dy, du, dv);
+		}
 
 		lastR += dy + du;
 		lastG += dy;
@@ -101,6 +116,10 @@ public abstract class FluidQOIInterleavedByteDecoder extends FluidQOIDecoder {
 		int du = ((data2 & 0b00001111) << 28) >> 28;
 		int dv = ((data3 & 0b11110000) << 24) >> 28;
 		int da = ((data3 & 0b00001111) << 28) >> 28;
+
+		if (FluidQOIImageDecoder.debugging) {
+			statistics.recordOpLuma4444(data1, data2, data3, dy, du, dv, da);
+		}
 
 		lastR += dy + du;
 		lastG += dy;
@@ -125,6 +144,10 @@ public abstract class FluidQOIInterleavedByteDecoder extends FluidQOIDecoder {
 
 		if ((mask & 0b0001) != 0) {
 			lastA = in.get();
+		}
+
+		if (FluidQOIImageDecoder.debugging) {
+			statistics.recordOpMask4(data, mask, lastR, lastG, lastB, lastA);
 		}
 	}
 }
