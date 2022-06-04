@@ -43,10 +43,6 @@ public class FluidQOI888Encoder extends FluidQOIEncoder {
 		for (byte[] bytes : recentColorsList) {
 			Arrays.fill(bytes, (byte)0);
 		}
-
-		if (indexLength > 1) {
-			Arrays.fill(recentColorsList[1], (byte)0xFF);
-		}
 	}
 
 	@Override

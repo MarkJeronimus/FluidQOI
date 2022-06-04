@@ -39,10 +39,6 @@ public abstract class FluidQOIPackedShortDecoder extends FluidQOIDecoder {
 
 		lastRGB = 0;
 		recentColorsList = new short[indexLength];
-
-		if (indexLength > 1) {
-			recentColorsList[1] = (short)0xFFFF;
-		}
 	}
 
 	protected abstract void decodeImageImplImpl(short[] pixels);

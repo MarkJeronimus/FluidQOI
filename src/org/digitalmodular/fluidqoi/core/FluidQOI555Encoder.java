@@ -33,10 +33,6 @@ public class FluidQOI555Encoder extends FluidQOIEncoder {
 	protected void resetEncoderState() {
 		lastRGB = 0;
 		Arrays.fill(recentColorsList, (short)0);
-
-		if (indexLength > 1) {
-			recentColorsList[1] = (short)0xFFFF;
-		}
 	}
 
 	@Override

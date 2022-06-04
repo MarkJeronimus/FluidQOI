@@ -2,7 +2,6 @@ package org.digitalmodular.fluidqoi.core;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-import java.util.Arrays;
 
 import org.digitalmodular.fluidqoi.FluidQOIFormat;
 import org.digitalmodular.fluidqoi.FluidQOIImageDecoder;
@@ -45,10 +44,6 @@ public abstract class FluidQOIInterleavedByteDecoder extends FluidQOIDecoder {
 		lastB = 0;
 		lastA = (byte)255;
 		recentColorsList = new byte[indexLength][4];
-
-		if (indexLength > 1) {
-			Arrays.fill(recentColorsList[1], (byte)0xFF);
-		}
 	}
 
 	protected abstract void decodeImageImplImpl(byte[] pixels);
