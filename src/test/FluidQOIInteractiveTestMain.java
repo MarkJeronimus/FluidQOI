@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
-import java.util.stream.IntStream;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -27,13 +26,16 @@ import org.digitalmodular.fluidqoi.FluidQOIImageEncoder;
  */
 // Created 2022-05-22
 public class FluidQOIInteractiveTestMain extends JPanel {
-	private static int fileIndex = 52;
+	private static int fileIndex = 0;
 
 	private BufferedImage image1 = null;
 	private BufferedImage image2 = null;
 
 	public static void main(String... args) throws IOException {
-		FluidQOITestMain.findFilesToBenchmark(FluidQOITestMain.files, Paths.get("images-pixelart-tiles"));
+//		FluidQOITestMain.collectImageFilesRecursively(FluidQOITestMain.files, Paths.get("qoi_test_images"));
+//		FluidQOITestMain.collectImageFilesRecursively(FluidQOITestMain.files, Paths.get("qoi_benchmark_suite"));
+//		FluidQOITestMain.collectImageFilesRecursively(FluidQOITestMain.files, Paths.get("images-lance"));
+		FluidQOITestMain.collectImageFilesRecursively(FluidQOITestMain.files, Paths.get("images-pixelart-tiles"));
 		FluidQOITestMain.files.sort(Comparator.comparing(Path::getFileName));
 
 		FluidQOIImageEncoder.debugging = true;
@@ -45,13 +47,13 @@ public class FluidQOIInteractiveTestMain extends JPanel {
 		}
 
 //		fileIndex = ThreadLocalRandom.current().nextInt(files.size());
-		fileIndex = IntStream.range(0, FluidQOITestMain.files.size())
-		                     .filter(i -> {
-			                     Path file = FluidQOITestMain.files.get(i);
-			                     return file.getFileName().toString().startsWith("79E5B7F3");
-		                     })
-		                     .findFirst()
-		                     .orElse(0);
+//		fileIndex = IntStream.range(0, FluidQOITestMain.files.size())
+//		                     .filter(i -> {
+//			                     Path file = FluidQOITestMain.files.get(i);
+//			                     return file.getFileName().toString().startsWith("79E5B7F3");
+//		                     })
+//		                     .findFirst()
+//		                     .orElse(0);
 
 		SwingUtilities.invokeLater(() -> {
 			JFrame f = new JFrame();

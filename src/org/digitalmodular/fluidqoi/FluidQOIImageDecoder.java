@@ -16,13 +16,13 @@ import org.digitalmodular.fluidqoi.core.FluidQOIDecoder;
 // Created 2022-05-14
 @SuppressWarnings("ConstantConditions")
 public class FluidQOIImageDecoder {
-	private int            width  = 0;
-	private int            height = 0;
-	private FluidQOIFormat format;
-	private int            indexLength;
+	private int            width       = 0;
+	private int            height      = 0;
+	private FluidQOIFormat format      = FluidQOIFormat.RGBA8888;
+	private int            indexLength = 0;
 
 	@SuppressWarnings({"PublicField", "StaticNonFinalField"})
-	public static       boolean debugging       = false;
+	public static boolean debugging = false;
 
 	public BufferedImage decode(ByteBuffer in) throws IOException {
 		readHeader(in);

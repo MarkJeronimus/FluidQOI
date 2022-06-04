@@ -40,7 +40,10 @@ public final class FluidQOITestMain {
 		FluidQOIImageEncoder.debugging = false;
 		FluidQOIImageDecoder.debugging = false;
 
-		findFilesToBenchmark(files, Paths.get("images-pixelart-tiles"));
+//		collectImageFilesRecursively(files, Paths.get("qoi_test_images"));
+//		collectImageFilesRecursively(files, Paths.get("qoi_benchmark_suite"));
+//		collectImageFilesRecursively(files, Paths.get("images-lance"));
+		collectImageFilesRecursively(files, Paths.get("images-pixelart-tiles"));
 		files.sort(Comparator.comparing(Path::getFileName));
 
 		for (Path file : files) {
@@ -48,7 +51,7 @@ public final class FluidQOITestMain {
 		}
 	}
 
-	static void findFilesToBenchmark(Collection<Path> files, Path path) throws IOException {
+	static void collectImageFilesRecursively(Collection<Path> files, Path path) throws IOException {
 		Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
 			@Override
 			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
