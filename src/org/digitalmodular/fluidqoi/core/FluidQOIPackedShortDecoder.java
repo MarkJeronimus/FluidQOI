@@ -59,7 +59,7 @@ public abstract class FluidQOIPackedShortDecoder extends FluidQOIDecoder {
 	}
 
 	protected void readOpLuma222(int data) {
-		int value = data - opLuma222;
+		int value = data - opLuma222 + 1;
 
 		int dy = (value & 0b110000) << 26 >> 3; // 5 bits, left-aligned
 		int du = (value & 0b001100) << 28 >> 3; // 5 bits, left-aligned
@@ -79,7 +79,7 @@ public abstract class FluidQOIPackedShortDecoder extends FluidQOIDecoder {
 	}
 
 	protected void readOpLuma322(int data) {
-		int value = data - opLuma322;
+		int value = data - opLuma322 + 1;
 
 		int dy = (value & 0b1110000) << 25 >> 3; // 6 bits, left-aligned
 		int du = (value & 0b0001100) << 28 >> 4; // 6 bits, left-aligned

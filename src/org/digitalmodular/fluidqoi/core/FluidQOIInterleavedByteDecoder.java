@@ -71,7 +71,7 @@ public abstract class FluidQOIInterleavedByteDecoder extends FluidQOIDecoder {
 	}
 
 	protected void readOpLuma222(int data) {
-		int value = data - opLuma222;
+		int value = data - opLuma222 + 1;
 
 		int dy = ((value & 0b110000) << 26) >> 30;
 		int du = ((value & 0b001100) << 28) >> 30;

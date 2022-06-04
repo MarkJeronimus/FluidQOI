@@ -25,7 +25,7 @@ import org.digitalmodular.fluidqoi.FluidQOIImageEncoder;
  */
 // Created 2022-05-22
 public class FluidQOIInteractiveTestMain extends JPanel {
-	private static int fileIndex = 0;
+	private static int fileIndex = 4404;
 
 	private BufferedImage image1 = null;
 	private BufferedImage image2 = null;
@@ -127,6 +127,8 @@ public class FluidQOIInteractiveTestMain extends JPanel {
 		if (image1 == null)
 			return;
 
+		drawTransparencyCheckerboard(g);
+
 		g.drawImage(image1,
 		            0, 0, getWidth() / 2, getHeight(),
 		            0, 0, image1.getWidth(), image1.getHeight(),
@@ -150,6 +152,18 @@ public class FluidQOIInteractiveTestMain extends JPanel {
 			}
 			g.setColor(Color.BLACK);
 			g.drawLine(getWidth() / 2, 0, getWidth() / 2, getHeight());
+		}
+	}
+
+	private void drawTransparencyCheckerboard(Graphics g) {
+		int blockSize = 16;
+		for (int y = 0; y < getWidth(); y += blockSize) {
+			boolean b = (y / blockSize & 1) != 0;
+			for (int x = 0; x < getWidth(); x += blockSize) {
+				g.setColor(b ? Color.LIGHT_GRAY : Color.GRAY);
+				g.fillRect(x, y, blockSize, blockSize);
+				b = !b;
+			}
 		}
 	}
 }

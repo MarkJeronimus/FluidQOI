@@ -101,7 +101,7 @@ public abstract class FluidQOIEncoder extends FluidQOICodec {
 	}
 
 	protected void writeOpLuma222(int dy, int du, int dv) {
-		int data = opLuma222 + ((dy & 0b11) << 4) | ((du & 0b11) << 2) | (dv & 0b11);
+		int data = opLuma222 + (((dy & 0b11) << 4) | ((du & 0b11) << 2) | (dv & 0b11)) - 1;
 
 		if (FluidQOIImageEncoder.debugging) {
 			statistics.recordOpLuma222(data, dy, du, dv);
@@ -111,7 +111,7 @@ public abstract class FluidQOIEncoder extends FluidQOICodec {
 	}
 
 	protected void writeOpLuma322(int dy, int du, int dv) {
-		int data = opLuma322 + (((dy & 0b111) << 4) | ((du & 0b11) << 2) | (dv & 0b11));
+		int data = opLuma322 + (((dy & 0b111) << 4) | ((du & 0b11) << 2) | (dv & 0b11)) - 1;
 
 		if (FluidQOIImageEncoder.debugging) {
 			statistics.recordOpLuma322(data, dy, du, dv);
@@ -133,8 +133,8 @@ public abstract class FluidQOIEncoder extends FluidQOICodec {
 	}
 
 	protected void writeOpLuma4444(int dy, int du, int dv, int da) {
-		int data2 = ((dy & 0x1111) << 4) | (du & 0x1111);
-		int data3 = ((dv & 0x1111) << 4) | (da & 0x1111);
+		int data2 = ((dy & 0b1111) << 4) | (du & 0b1111);
+		int data3 = ((dv & 0b1111) << 4) | (da & 0b1111);
 
 		if (FluidQOIImageEncoder.debugging) {
 			statistics.recordOpLuma4444(opLuma4444, data2, data3, dy, du, dv, da);

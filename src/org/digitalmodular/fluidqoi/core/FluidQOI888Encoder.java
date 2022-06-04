@@ -68,7 +68,7 @@ public class FluidQOI888Encoder extends FluidQOIEncoder {
 				writeOpRepeat();
 			}
 
-			int recentColorIndex = findRecentColor(r, g, b, a);
+			int recentColorIndex = findRecentColor(r, g, b);
 			if (recentColorIndex >= 0) {
 				writeOpIndex((byte)recentColorIndex);
 				recordRecent = false;
@@ -112,10 +112,10 @@ public class FluidQOI888Encoder extends FluidQOIEncoder {
 		}
 	}
 
-	private int findRecentColor(byte r, byte g, byte b, byte a) {
+	private int findRecentColor(byte r, byte g, byte b) {
 		for (int i = 0; i < indexLength; i++) {
 			if (recentColorsList[i][0] == r && recentColorsList[i][1] == g &&
-			    recentColorsList[i][2] == b && recentColorsList[i][3] == a) {
+			    recentColorsList[i][2] == b) {
 				return i;
 			}
 		}
