@@ -40,9 +40,10 @@ public class FluidQOI555Encoder extends FluidQOIEncoder {
 
 	@Override
 	public void encodePixel(byte r, byte g, byte b, byte a) {
-		short rgb = (short)(((r & 0b11111000) << 7) |
-		                    ((g & 0b11111000) << 2) |
-		                    ((b & 0b11111000) >> 3));
+		// Premultiply alpha
+		short rgb = (short)((((int)((r & 0xFF) / 255.0f * (a & 0xFF) + 0.5f) & 0b11111000) << 7) |
+		                    (((int)((g & 0xFF) / 255.0f * (a & 0xFF) + 0.5f) & 0b11111000) << 2) |
+		                    (((int)((b & 0xFF) / 255.0f * (a & 0xFF) + 0.5f) & 0b11111000) >> 3));
 
 		encodePixel(rgb);
 	}

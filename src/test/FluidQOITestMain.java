@@ -88,7 +88,7 @@ public final class FluidQOITestMain {
 		try {
 			FluidQOIConfig config  = new FluidQOIConfig(16).setFormatOverride(FluidQOIFormat.RGB565);
 			ByteBuffer     qoiData = new FluidQOIImageEncoder(config).encode(image);
-			BufferedImage  image2  = new FluidQOIImageDecoder().decode(qoiData);
+ 			BufferedImage  image2  = new FluidQOIImageDecoder().decode(qoiData);
 
 			BufferedImage image1 = new BufferedImage(image2.getWidth(), image2.getHeight(), image2.getType());
 			Graphics2D    g      = image1.createGraphics();
@@ -127,7 +127,7 @@ public final class FluidQOITestMain {
 			short[] pixels2 = ((DataBufferUShort)dataBuffer2).getData();
 			for (int i = 0; i < pixels1.length; i++) {
 				if (pixels1[i] != pixels2[i]) {
-					return i / images[2].getColorModel().getNumComponents();
+					return i;
 				}
 			}
 		} else if (dataBuffer2 instanceof DataBufferInt) {
@@ -135,7 +135,7 @@ public final class FluidQOITestMain {
 			int[] pixels2 = ((DataBufferInt)dataBuffer2).getData();
 			for (int i = 0; i < pixels1.length; i++) {
 				if (pixels1[i] != pixels2[i]) {
-					return i / images[2].getColorModel().getNumComponents();
+					return i;
 				}
 			}
 		} else {

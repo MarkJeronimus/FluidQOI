@@ -25,7 +25,7 @@ import org.digitalmodular.fluidqoi.FluidQOIImageEncoder;
  */
 // Created 2022-05-22
 public class FluidQOIInteractiveTestMain extends JPanel {
-	private static int fileIndex = 2977;
+	private static int fileIndex = 2981;
 
 	private BufferedImage image1 = null;
 	private BufferedImage image2 = null;
