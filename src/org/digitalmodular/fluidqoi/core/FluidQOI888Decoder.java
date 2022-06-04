@@ -53,7 +53,7 @@ public class FluidQOI888Decoder extends FluidQOIInterleavedByteDecoder {
 				readOpLuma644(code);
 			}
 
-			if (repeatCount * 4 > pixels.length - p) {
+			if (repeatCount * 3 > pixels.length - p) {
 				repeatCount = (pixels.length - p) / 4;
 			}
 

@@ -36,6 +36,8 @@ public class FluidQOI888Encoder extends FluidQOIEncoder {
 
 	@Override
 	protected void resetEncoderState() {
+		super.resetEncoderState();
+
 		lastR = 0;
 		lastG = 0;
 		lastB = 0;

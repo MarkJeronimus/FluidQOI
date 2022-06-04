@@ -25,7 +25,7 @@ import org.digitalmodular.fluidqoi.FluidQOIImageEncoder;
  */
 // Created 2022-05-22
 public class FluidQOIInteractiveTestMain extends JPanel {
-	private static int fileIndex = 4436;
+	private static int fileIndex = 806;
 
 	private BufferedImage image1 = null;
 	private BufferedImage image2 = null;
@@ -49,7 +49,7 @@ public class FluidQOIInteractiveTestMain extends JPanel {
 //		fileIndex = IntStream.range(0, FluidQOITestMain.files.size())
 //		                     .filter(i -> {
 //			                     Path file = FluidQOITestMain.files.get(i);
-//			                     return file.getFileName().toString().startsWith("79E5B7F3");
+//			                     return file.getFileName().toString().startsWith("1693AD85");
 //		                     })
 //		                     .findFirst()
 //		                     .orElse(0);
