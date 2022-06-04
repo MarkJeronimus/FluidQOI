@@ -46,7 +46,7 @@ public class FluidQOI888Decoder extends FluidQOIInterleavedByteDecoder {
 				doRecordRecentColor = p == 0;
 				doResetRepeatMultiplier = false;
 			} else if (code >= opMask3) {
-				readOpMask4(code);
+				readOpMask3(code);
 			} else if (code >= opLuma222) {
 				readOpLuma222(code);
 			} else /*if (code >= opLuma644)*/ {

@@ -78,32 +78,32 @@ public class FluidQOIEncoderStatistics {
 		System.out.printf("%02X %02X %02X       OP_RGB565(%04X)\n", data1, data2 & 0xFF, data3 & 0xFF, rgb);
 	}
 
-	public void recordOpMask3(int data, int mask, byte r, byte g, byte b) {
+	public void recordOpMask3(int data, int mask, int r, int g, int b) {
 		r &= 0xFF;
 		g &= 0xFF;
 		b &= 0xFF;
 
-		if (mask == 0b0010) {
-			System.out.printf("%02X %02X          OP_MASK4(--B- %d)\n",
-			                  data, b & 0xFF, b);
-		} else if (mask == 0b0100) {
-			System.out.printf("%02X %02X          OP_MASK4(-G-- %d)\n",
-			                  data, g & 0xFF, g);
-		} else if (mask == 0b0110) {
-			System.out.printf("%02X %02X %02X       OP_MASK4(-GB- %d %d)\n",
-			                  data, g & 0xFF, b & 0xFF, g, b);
-		} else if (mask == 0b1000) {
-			System.out.printf("%02X %02X          OP_MASK4(R--- %d)\n",
-			                  data, r & 0xFF, r);
-		} else if (mask == 0b1010) {
-			System.out.printf("%02X %02X %02X       OP_MASK4(R-B- %d %d)\n",
-			                  data, r & 0xFF, b & 0xFF, r, b);
-		} else if (mask == 0b1100) {
-			System.out.printf("%02X %02X %02X       OP_MASK4(RG-- %d %d)\n",
-			                  data, r & 0xFF, g & 0xFF, r, g);
-		} else if (mask == 0b1110) {
-			System.out.printf("%02X %02X %02X %02X    OP_MASK4(RGB- %d %d %d)\n",
-			                  data, r & 0xFF, g & 0xFF, b & 0xFF, r, g, b);
+		if (mask == 0b001) {
+			System.out.printf("%02X %02X          OP_MASK3(··B %d)\n",
+			                  data, b, b);
+		} else if (mask == 0b010) {
+			System.out.printf("%02X %02X          OP_MASK3(·G· %d)\n",
+			                  data, g, g);
+		} else if (mask == 0b011) {
+			System.out.printf("%02X %02X %02X       OP_MASK3(·GB %d %d)\n",
+			                  data, g, b, g, b);
+		} else if (mask == 0b100) {
+			System.out.printf("%02X %02X          OP_MASK3(R·· %d)\n",
+			                  data, r, r);
+		} else if (mask == 0b101) {
+			System.out.printf("%02X %02X %02X       OP_MASK3(R·B %d %d)\n",
+			                  data, r, b, r, b);
+		} else if (mask == 0b110) {
+			System.out.printf("%02X %02X %02X       OP_MASK3(RG· %d %d)\n",
+			                  data, r, g, r, g);
+		} else if (mask == 0b111) {
+			System.out.printf("%02X %02X %02X %02X    OP_MASK3(RGB %d %d %d)\n",
+			                  data, r, g, b, r, g, b);
 		} else {
 			throw new AssertionError("Invalid mask: " + mask);
 		}
@@ -120,50 +120,50 @@ public class FluidQOIEncoderStatistics {
 		a &= 0xFF;
 
 		if (mask == 0b0001) {
-			System.out.printf("%02X %02X          OP_MASK4(---A %d)\n",
-			                  data, a & 0xFF, a);
+			System.out.printf("%02X %02X          OP_MASK4(···A %d)\n",
+			                  data, a, a);
 		} else if (mask == 0b0010) {
-			System.out.printf("%02X %02X          OP_MASK4(--B- %d)\n",
-			                  data, b & 0xFF, b);
+			System.out.printf("%02X %02X          OP_MASK4(··B· %d)\n",
+			                  data, b, b);
 		} else if (mask == 0b0011) {
-			System.out.printf("%02X %02X %02X       OP_MASK4(--BA %d %d)\n",
-			                  data, b & 0xFF, a & 0xFF, b, a);
+			System.out.printf("%02X %02X %02X       OP_MASK4(··BA %d %d)\n",
+			                  data, b, a, b, a);
 		} else if (mask == 0b0100) {
-			System.out.printf("%02X %02X          OP_MASK4(-G-- %d)\n",
-			                  data, g & 0xFF, g);
+			System.out.printf("%02X %02X          OP_MASK4(·G·· %d)\n",
+			                  data, g, g);
 		} else if (mask == 0b0101) {
-			System.out.printf("%02X %02X %02X       OP_MASK4(-G-A %d %d)\n",
-			                  data, g & 0xFF, a & 0xFF, g, a);
+			System.out.printf("%02X %02X %02X       OP_MASK4(·G·A %d %d)\n",
+			                  data, g, a, g, a);
 		} else if (mask == 0b0110) {
-			System.out.printf("%02X %02X %02X       OP_MASK4(-GB- %d %d)\n",
-			                  data, g & 0xFF, b & 0xFF, g, b);
+			System.out.printf("%02X %02X %02X       OP_MASK4(·GB· %d %d)\n",
+			                  data, g, b, g, b);
 		} else if (mask == 0b0111) {
-			System.out.printf("%02X %02X %02X %02X    OP_MASK4(-GBA %d %d %d)\n",
-			                  data, g & 0xFF, b & 0xFF, a & 0xFF, g, b, a);
+			System.out.printf("%02X %02X %02X %02X    OP_MASK4(·GBA %d %d %d)\n",
+			                  data, g, b, a, g, b, a);
 		} else if (mask == 0b1000) {
-			System.out.printf("%02X %02X          OP_MASK4(R--- %d)\n",
-			                  data, r & 0xFF, r);
+			System.out.printf("%02X %02X          OP_MASK4(R··· %d)\n",
+			                  data, r, r);
 		} else if (mask == 0b1001) {
-			System.out.printf("%02X %02X %02X       OP_MASK4(R--A %d %d)\n",
-			                  data, r & 0xFF, a & 0xFF, r, a);
+			System.out.printf("%02X %02X %02X       OP_MASK4(R··A %d %d)\n",
+			                  data, r, a, r, a);
 		} else if (mask == 0b1010) {
-			System.out.printf("%02X %02X %02X       OP_MASK4(R-B- %d %d)\n",
-			                  data, r & 0xFF, b & 0xFF, r, b);
+			System.out.printf("%02X %02X %02X       OP_MASK4(R·B· %d %d)\n",
+			                  data, r, b, r, b);
 		} else if (mask == 0b1011) {
-			System.out.printf("%02X %02X %02X %02X    OP_MASK4(R-BA %d %d %d)\n",
-			                  data, r & 0xFF, b & 0xFF, a & 0xFF, r, b, a);
+			System.out.printf("%02X %02X %02X %02X    OP_MASK4(R·BA %d %d %d)\n",
+			                  data, r, b, a, r, b, a);
 		} else if (mask == 0b1100) {
-			System.out.printf("%02X %02X %02X       OP_MASK4(RG-- %d %d)\n",
-			                  data, r & 0xFF, g & 0xFF, r, g);
+			System.out.printf("%02X %02X %02X       OP_MASK4(RG·· %d %d)\n",
+			                  data, r, g, r, g);
 		} else if (mask == 0b1101) {
-			System.out.printf("%02X %02X %02X %02X    OP_MASK4(RG-A %d %d %d)\n",
-			                  data, r & 0xFF, g & 0xFF, a & 0xFF, r, g, a);
+			System.out.printf("%02X %02X %02X %02X    OP_MASK4(RG·A %d %d %d)\n",
+			                  data, r, g, a, r, g, a);
 		} else if (mask == 0b1110) {
-			System.out.printf("%02X %02X %02X %02X    OP_MASK4(RGB- %d %d %d)\n",
-			                  data, r & 0xFF, g & 0xFF, b & 0xFF, r, g, b);
+			System.out.printf("%02X %02X %02X %02X    OP_MASK4(RGB· %d %d %d)\n",
+			                  data, r, g, b, r, g, b);
 		} else if (mask == 0b1111) {
 			System.out.printf("%02X %02X %02X %02X %02X OP_MASK4(RGBA %d %d %d %d)\n",
-			                  data, r & 0xFF, g & 0xFF, b & 0xFF, a & 0xFF, r, g, b, a);
+			                  data, r, g, b, a, r, g, b, a);
 		} else {
 			throw new AssertionError("Invalid mask: " + mask);
 		}

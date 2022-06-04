@@ -191,15 +191,15 @@ public abstract class FluidQOIEncoder extends FluidQOICodec {
 
 		out.put((byte)data1);
 
-		if ((mask & 0b1000) != 0) {
+		if ((mask & 0b100) != 0) {
 			out.put(r);
 		}
 
-		if ((mask & 0b0100) != 0) {
+		if ((mask & 0b010) != 0) {
 			out.put(g);
 		}
 
-		if ((mask & 0b0010) != 0) {
+		if ((mask & 0b001) != 0) {
 			out.put(b);
 		}
 	}

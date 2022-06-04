@@ -122,6 +122,26 @@ public abstract class FluidQOIInterleavedByteDecoder extends FluidQOIDecoder {
 		lastA += da;
 	}
 
+	protected void readOpMask3(int data) {
+		int mask = data - opMask3;
+
+		if ((mask & 0b100) != 0) {
+			lastR = in.get();
+		}
+
+		if ((mask & 0b010) != 0) {
+			lastG = in.get();
+		}
+
+		if ((mask & 0b001) != 0) {
+			lastB = in.get();
+		}
+
+		if (FluidQOIImageDecoder.debugging) {
+			statistics.recordOpMask3(data, mask, lastR, lastG, lastB);
+		}
+	}
+
 	protected void readOpMask4(int data) {
 		int mask = data - opMask4;
 
