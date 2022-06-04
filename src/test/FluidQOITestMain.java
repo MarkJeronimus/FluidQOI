@@ -41,9 +41,9 @@ public final class FluidQOITestMain {
 		FluidQOIImageDecoder.debugging = false;
 
 //		collectImageFilesRecursively(files, Paths.get("qoi_test_images"));
-//		collectImageFilesRecursively(files, Paths.get("qoi_benchmark_suite"));
-//		collectImageFilesRecursively(files, Paths.get("images-lance"));
 		collectImageFilesRecursively(files, Paths.get("images-pixelart-tiles"));
+//		collectImageFilesRecursively(files, Paths.get("images-lance"));
+//		collectImageFilesRecursively(files, Paths.get("qoi_benchmark_suite"));
 		files.sort(Comparator.comparing(Path::getFileName));
 
 		for (Path file : files) {
@@ -52,7 +52,8 @@ public final class FluidQOITestMain {
 			int mismatchPixel = compareImages(images);
 			if (mismatchPixel >= 0) {
 				System.out.println(
-						file.getFileName() + ": Images differ at pixel " + mismatchPixel + " (" +
+						file.getFileName() + ": Images differ at pixel " + mismatchPixel + " / " +
+						images[0].getWidth() * images[0].getHeight() + " (" +
 						mismatchPixel % images[2].getWidth() + ", " + mismatchPixel / images[2].getWidth() + ')');
 			}
 		}

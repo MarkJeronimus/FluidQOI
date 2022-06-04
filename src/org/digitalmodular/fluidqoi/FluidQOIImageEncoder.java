@@ -1,6 +1,7 @@
 package org.digitalmodular.fluidqoi;
 
 import java.awt.Graphics2D;
+import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.ComponentSampleModel;
@@ -59,27 +60,17 @@ public final class FluidQOIImageEncoder {
 		// TODO Do actual image analysis to decide the "smallest" required format
 
 		switch (image.getType()) {
-			case BufferedImage.TYPE_INT_RGB:
-			case BufferedImage.TYPE_INT_BGR:
-			case BufferedImage.TYPE_3BYTE_BGR:
-			case BufferedImage.TYPE_BYTE_GRAY:
-			case BufferedImage.TYPE_USHORT_GRAY:
-			case BufferedImage.TYPE_BYTE_BINARY:
-			case BufferedImage.TYPE_BYTE_INDEXED:
-				return FluidQOIFormat.RGB888;
-			case BufferedImage.TYPE_INT_ARGB:
-			case BufferedImage.TYPE_4BYTE_ABGR:
-				return FluidQOIFormat.RGBA8888;
 			case BufferedImage.TYPE_USHORT_565_RGB:
+				assert image.getColorModel().getTransparency() == Transparency.OPAQUE;
+				assert !image.getColorModel().hasAlpha();
 				return FluidQOIFormat.RGB565;
 			case BufferedImage.TYPE_USHORT_555_RGB:
+				assert image.getColorModel().getTransparency() == Transparency.OPAQUE;
+				assert !image.getColorModel().hasAlpha();
 				return FluidQOIFormat.RGB555;
 			default:
-				break;
+				return image.getColorModel().hasAlpha() ? FluidQOIFormat.RGBA8888 : FluidQOIFormat.RGB888;
 		}
-
-		boolean hasAlpha = image.getColorModel().hasAlpha();
-		return hasAlpha ? FluidQOIFormat.RGBA8888 : FluidQOIFormat.RGB888;
 	}
 
 	private FluidQOIEncoder makeEncoder(FluidQOIFormat format) {

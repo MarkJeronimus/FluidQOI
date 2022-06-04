@@ -25,16 +25,16 @@ import org.digitalmodular.fluidqoi.FluidQOIImageEncoder;
  */
 // Created 2022-05-22
 public class FluidQOIInteractiveTestMain extends JPanel {
-	private static int fileIndex = 806;
+	private static int fileIndex = 0;
 
 	private BufferedImage image1 = null;
 	private BufferedImage image2 = null;
 
 	public static void main(String... args) throws IOException {
 //		FluidQOITestMain.collectImageFilesRecursively(FluidQOITestMain.files, Paths.get("qoi_test_images"));
-//		FluidQOITestMain.collectImageFilesRecursively(FluidQOITestMain.files, Paths.get("qoi_benchmark_suite"));
-//		FluidQOITestMain.collectImageFilesRecursively(FluidQOITestMain.files, Paths.get("images-lance"));
 		FluidQOITestMain.collectImageFilesRecursively(FluidQOITestMain.files, Paths.get("images-pixelart-tiles"));
+//		FluidQOITestMain.collectImageFilesRecursively(FluidQOITestMain.files, Paths.get("images-lance"));
+//		FluidQOITestMain.collectImageFilesRecursively(FluidQOITestMain.files, Paths.get("qoi_benchmark_suite"));
 		FluidQOITestMain.files.sort(Comparator.comparing(Path::getFileName));
 
 		FluidQOIImageEncoder.debugging = true;
@@ -49,7 +49,7 @@ public class FluidQOIInteractiveTestMain extends JPanel {
 //		fileIndex = IntStream.range(0, FluidQOITestMain.files.size())
 //		                     .filter(i -> {
 //			                     Path file = FluidQOITestMain.files.get(i);
-//			                     return file.getFileName().toString().startsWith("1693AD85");
+//			                     return file.getFileName().toString().startsWith("pyramid_PNG11");
 //		                     })
 //		                     .findFirst()
 //		                     .orElse(0);
