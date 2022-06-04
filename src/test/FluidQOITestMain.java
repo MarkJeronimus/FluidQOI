@@ -47,7 +47,14 @@ public final class FluidQOITestMain {
 		files.sort(Comparator.comparing(Path::getFileName));
 
 		for (Path file : files) {
-			convertImage(file);
+			BufferedImage[] images = convertImage(file);
+
+			int mismatchPixel = compareImages(images);
+			if (mismatchPixel >= 0) {
+				System.out.println(
+						file.getFileName() + ": Images differ at pixel " + mismatchPixel + " (" +
+						mismatchPixel % images[2].getWidth() + ", " + mismatchPixel / images[2].getWidth() + ')');
+			}
 		}
 	}
 
@@ -81,13 +88,19 @@ public final class FluidQOITestMain {
 			ByteBuffer     qoiData = new FluidQOIImageEncoder(config).encode(image);
 			BufferedImage  image2  = new FluidQOIImageDecoder().decode(qoiData);
 
+			BufferedImage image1 = new BufferedImage(image2.getWidth(), image2.getHeight(), image2.getType());
+			Graphics2D    g      = image1.createGraphics();
+			try {
+				g.drawImage(image, 0, 0, null);
+			} finally {
+				g.dispose();
+			}
+
 //			String filename = file.getFileName().toString();
 //			filename = filename.substring(0, filename.length() - 4) + ".qoi565";
 //			Files.write(file.getParent().resolve(filename), qoi565.array());
 
-			compareImages(file, image, image2);
-
-			return new BufferedImage[]{image, image2};
+			return new BufferedImage[]{image, image1, image2};
 		} catch (IOException ex) {
 			ex.printStackTrace();
 			System.exit(1);
@@ -95,27 +108,16 @@ public final class FluidQOITestMain {
 		}
 	}
 
-	private static void compareImages(Path file, BufferedImage image, BufferedImage image2) {
-		BufferedImage image1 = new BufferedImage(image2.getWidth(), image2.getHeight(), image2.getType());
+	static int compareImages(BufferedImage[] images) {
+		DataBuffer dataBuffer1 = images[1].getRaster().getDataBuffer();
+		DataBuffer dataBuffer2 = images[2].getRaster().getDataBuffer();
 
-		Graphics2D g = image1.createGraphics();
-		try {
-			g.drawImage(image, 0, 0, null);
-		} finally {
-			g.dispose();
-		}
-
-		DataBuffer dataBuffer1 = image1.getRaster().getDataBuffer();
-		DataBuffer dataBuffer2 = image2.getRaster().getDataBuffer();
-
-		int mismatchIndex = -1;
 		if (dataBuffer2 instanceof DataBufferByte) {
 			byte[] pixels1 = ((DataBufferByte)dataBuffer1).getData();
 			byte[] pixels2 = ((DataBufferByte)dataBuffer2).getData();
 			for (int i = 0; i < pixels1.length; i++) {
 				if (pixels1[i] != pixels2[i]) {
-					mismatchIndex = i;
-					break;
+					return i / images[2].getColorModel().getNumComponents();
 				}
 			}
 		} else if (dataBuffer2 instanceof DataBufferUShort) {
@@ -123,8 +125,7 @@ public final class FluidQOITestMain {
 			short[] pixels2 = ((DataBufferUShort)dataBuffer2).getData();
 			for (int i = 0; i < pixels1.length; i++) {
 				if (pixels1[i] != pixels2[i]) {
-					mismatchIndex = i;
-					break;
+					return i / images[2].getColorModel().getNumComponents();
 				}
 			}
 		} else if (dataBuffer2 instanceof DataBufferInt) {
@@ -132,16 +133,13 @@ public final class FluidQOITestMain {
 			int[] pixels2 = ((DataBufferInt)dataBuffer2).getData();
 			for (int i = 0; i < pixels1.length; i++) {
 				if (pixels1[i] != pixels2[i]) {
-					mismatchIndex = i;
-					break;
+					return i / images[2].getColorModel().getNumComponents();
 				}
 			}
 		} else {
 			throw new AssertionError("Unknown data buffer: " + dataBuffer2.getClass());
 		}
 
-		if (mismatchIndex >= 0) {
-			System.out.println(file.getFileName() + ": Images differ at index " + mismatchIndex);
-		}
+		return -1;
 	}
 }

@@ -7,7 +7,6 @@ import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferUShort;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -73,8 +72,6 @@ public class FluidQOIInteractiveTestMain extends JPanel {
 		setBackground(Color.WHITE);
 
 		fileIndex %= FluidQOITestMain.files.size();
-		convertImage();
-		assert image1 != null;
 
 		setPreferredSize(new Dimension(512, 256));
 
@@ -96,35 +93,30 @@ public class FluidQOIInteractiveTestMain extends JPanel {
 				repaint();
 			}
 		});
+
+		SwingUtilities.invokeLater(this::convertImage);
 	}
 
 	private void convertImage() {
 		Path file = FluidQOITestMain.files.get(fileIndex);
-
-		BufferedImage[] images = FluidQOITestMain.convertImage(file);
-
-		image1 = images[0];
-		image2 = images[1];
-
-		short[] pixels1 = ((DataBufferUShort)image1.getRaster().getDataBuffer()).getData();
-		short[] pixels2 = ((DataBufferUShort)image2.getRaster().getDataBuffer()).getData();
 
 		Frame topLevelAncestor = (Frame)getTopLevelAncestor();
 		if (topLevelAncestor != null) {
 			topLevelAncestor.setTitle(fileIndex + ": " + file.getFileName());
 		}
 
-		for (int i = 0; i < pixels1.length; i++) {
-			if (pixels1[i] != pixels2[i]) {
-				int p = i;
-				SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(
-						this,
-						"Images differ at index " + p + ": " +
-						Integer.toHexString(pixels1[p]) + " vs " + Integer.toHexString(pixels2[p]),
-						getClass().getSimpleName(),
-						JOptionPane.ERROR_MESSAGE));
-				break;
-			}
+		BufferedImage[] images = FluidQOITestMain.convertImage(file);
+		image1 = images[1];
+		image2 = images[2];
+
+		int mismatchPixel = FluidQOITestMain.compareImages(images);
+		if (mismatchPixel >= 0) {
+			SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(
+					this,
+					"Images differ at pixel " + mismatchPixel + " (" +
+					mismatchPixel % images[2].getWidth() + ", " + mismatchPixel / images[2].getWidth() + ')',
+					getClass().getSimpleName(),
+					JOptionPane.ERROR_MESSAGE));
 		}
 	}
 
