@@ -86,7 +86,7 @@ public final class FluidQOITestMain {
 		}
 
 		try {
-			FluidQOIConfig config  = new FluidQOIConfig(16).setFormatOverride(FluidQOIFormat.RGB565);
+			FluidQOIConfig config  = new FluidQOIConfig(16).setFormatOverride(FluidQOIFormat.RGB555);
 			ByteBuffer     qoiData = new FluidQOIImageEncoder(config).encode(image);
  			BufferedImage  image2  = new FluidQOIImageDecoder().decode(qoiData);
 

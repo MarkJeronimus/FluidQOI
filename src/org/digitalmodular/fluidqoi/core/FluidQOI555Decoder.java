@@ -61,7 +61,7 @@ public class FluidQOI555Decoder extends FluidQOIPackedShortDecoder {
 				repeatCount--;
 			} while (repeatCount > 0);
 
-			if (p == pixels.length || in.remaining() < FluidQOI888Encoder.LONGEST_OP) {
+			if (p == pixels.length || in.remaining() < FluidQOI555Encoder.LONGEST_OP) {
 				break;
 			}
 
