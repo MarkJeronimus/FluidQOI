@@ -50,7 +50,7 @@ public class FluidQOI555Decoder extends FluidQOIPackedShortDecoder {
 				readOpRGB555(code);
 			}
 
-			if (repeatCount * 4 > pixels.length - p) {
+			if (repeatCount > pixels.length - p) {
 				repeatCount = (pixels.length - p) / 4;
 			}
 

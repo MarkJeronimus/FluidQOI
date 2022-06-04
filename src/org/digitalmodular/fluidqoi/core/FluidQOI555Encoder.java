@@ -31,15 +31,18 @@ public class FluidQOI555Encoder extends FluidQOIEncoder {
 
 	@Override
 	protected void resetEncoderState() {
+		super.resetEncoderState();
+
 		lastRGB = 0;
+
 		Arrays.fill(recentColorsList, (short)0);
 	}
 
 	@Override
 	public void encodePixel(byte r, byte g, byte b, byte a) {
-		short rgb = (short)((r & 0b11111) << 11 |
-		                    (g & 0b111111) << 5 |
-		                    (b & 0b11111));
+		short rgb = (short)(((r & 0b11111000) << 7) |
+		                    ((g & 0b11111000) << 2) |
+		                    ((b & 0b11111000) >> 3));
 
 		encodePixel(rgb);
 	}

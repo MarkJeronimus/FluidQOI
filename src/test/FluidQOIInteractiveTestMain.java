@@ -25,7 +25,7 @@ import org.digitalmodular.fluidqoi.FluidQOIImageEncoder;
  */
 // Created 2022-05-22
 public class FluidQOIInteractiveTestMain extends JPanel {
-	private static int fileIndex = 0;
+	private static int fileIndex = 2977;
 
 	private BufferedImage image1 = null;
 	private BufferedImage image2 = null;
@@ -45,7 +45,7 @@ public class FluidQOIInteractiveTestMain extends JPanel {
 			System.exit(1);
 		}
 
-//		fileIndex = ThreadLocalRandom.current().nextInt(files.size());
+//		fileIndex = ThreadLocalRandom.current().nextInt(FluidQOITestMain.files.size());
 //		fileIndex = IntStream.range(0, FluidQOITestMain.files.size())
 //		                     .filter(i -> {
 //			                     Path file = FluidQOITestMain.files.get(i);
@@ -73,7 +73,7 @@ public class FluidQOIInteractiveTestMain extends JPanel {
 
 		fileIndex %= FluidQOITestMain.files.size();
 
-		setPreferredSize(new Dimension(512, 256));
+		setPreferredSize(new Dimension(1024, 512));
 
 		// Yes I know it's bad practice to do work on the EDT, but it's a cheap test class anyway.
 

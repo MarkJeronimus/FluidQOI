@@ -53,7 +53,7 @@ public class FluidQOI565Decoder extends FluidQOIPackedShortDecoder {
 				readOpLuma433(code);
 			}
 
-			if (repeatCount * 4 > pixels.length - p) {
+			if (repeatCount > pixels.length - p) {
 				repeatCount = (pixels.length - p) / 4;
 			}
 

@@ -21,6 +21,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.digitalmodular.fluidqoi.FluidQOIConfig;
+import org.digitalmodular.fluidqoi.FluidQOIFormat;
 import org.digitalmodular.fluidqoi.FluidQOIImageDecoder;
 import org.digitalmodular.fluidqoi.FluidQOIImageEncoder;
 
@@ -85,7 +86,7 @@ public final class FluidQOITestMain {
 		}
 
 		try {
-			FluidQOIConfig config  = new FluidQOIConfig(16);
+			FluidQOIConfig config  = new FluidQOIConfig(16).setFormatOverride(FluidQOIFormat.RGB565);
 			ByteBuffer     qoiData = new FluidQOIImageEncoder(config).encode(image);
 			BufferedImage  image2  = new FluidQOIImageDecoder().decode(qoiData);
 

@@ -1,7 +1,7 @@
 package org.digitalmodular.fluidqoi.core;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferShort;
+import java.awt.image.DataBufferUShort;
 
 import org.digitalmodular.fluidqoi.FluidQOIFormat;
 import org.digitalmodular.fluidqoi.FluidQOIImageEncoder;
@@ -24,7 +24,7 @@ public abstract class FluidQOIPackedShortDecoder extends FluidQOIDecoder {
 		resetDecoderState();
 
 		BufferedImage image  = createImage(width, height);
-		short[]       pixels = ((DataBufferShort)image.getRaster().getDataBuffer()).getData();
+		short[]       pixels = ((DataBufferUShort)image.getRaster().getDataBuffer()).getData();
 
 		decodeImageImplImpl(pixels);
 
@@ -55,7 +55,7 @@ public abstract class FluidQOIPackedShortDecoder extends FluidQOIDecoder {
 			statistics.recordOpIndex(data, index);
 		}
 
-		lastRGB = recentColorsList[index - opIndex];
+		lastRGB = recentColorsList[index];
 	}
 
 	protected void readOpLuma222(int data) {
@@ -89,12 +89,12 @@ public abstract class FluidQOIPackedShortDecoder extends FluidQOIDecoder {
 			statistics.recordOpLuma322(data, dy >> 26, du >> 26, dv >> 26);
 		}
 
-		int r = (lastRGB & 0b11111000_00000000) << 16; // 5 bits, left-aligned
-		int g = (lastRGB & 0b00000111_11100000) << 21; // 6 bits, left-aligned
-		int b = (lastRGB & 0b00000000_00011111) << 27; // 5 bits, left-aligned
-		r = (r + du) >>> 16;
-		g = (g + dy) >>> 21;
-		b = (b + dv) >>> 27;
+		int r = lastRGB & 0b11111000_00000000;
+		int g = lastRGB & 0b00000111_11100000;
+		int b = lastRGB & 0b00000000_00011111;
+		r = ((r << 16) + dy + du) >>> 16;
+		g = ((g << 21) + dy) >>> 21;
+		b = ((b << 27) + dy + dv) >>> 27;
 		lastRGB = (short)(r | g | b);
 	}
 
@@ -103,19 +103,19 @@ public abstract class FluidQOIPackedShortDecoder extends FluidQOIDecoder {
 		int data2 = in.get();
 
 		int dy = (((value & 0b00000011 << 30) | (data2 & 0b11000000) << 22)) >> 2; // 6 bits, left-aligned
-		int du = ((data2 & 0b00111000) << 26) >> 3;                                // 6 bits, left-aligned
-		int dv = ((data2 & 0b00000111) << 29) >> 3;                                // 6 bits, left-aligned
+		int du = ((data2 & 0b00111000) << 26) >> 2;                                // 5 bits, left-aligned
+		int dv = ((data2 & 0b00000111) << 29) >> 2;                                // 5 bits, left-aligned
 
 		if (FluidQOIImageEncoder.debugging) {
 			statistics.recordOpLuma433(data1, data2, dy >> 26, du >> 26, dv >> 26);
 		}
 
-		int r = (lastRGB & 0b11111000_00000000) << 16; // 5 bits, left-aligned
-		int g = (lastRGB & 0b00000111_11100000) << 21; // 6 bits, left-aligned
-		int b = (lastRGB & 0b00000000_00011111) << 27; // 5 bits, left-aligned
-		r = (r + du) >>> 16;
-		g = (g + dy) >>> 21;
-		b = (b + dv) >>> 27;
+		int r = (lastRGB & 0b11111000_00000000);
+		int g = (lastRGB & 0b00000111_11100000);
+		int b = (lastRGB & 0b00000000_00011111);
+		r = ((r << 16) + (dy << 1) + du) >>> 16;
+		g = ((g << 21) + dy) >>> 21;
+		b = ((b << 26) + (dy << 1) + dv) >>> 27;
 		lastRGB = (short)(r | g | b);
 	}
 
